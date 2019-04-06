@@ -1,3 +1,6 @@
+## Note!:
+Unlike the parent repository, this is an package, does not work as a command line script, *AND* it requires >=Python 3.5.
+
 AutoImpute: Autoencoder based imputation of single cell RNA-seq data
 ================
 Divyanshu Talwar, Aanchal Mongia, Debarka Sengupta, and Angshul Majumdar
@@ -15,7 +18,7 @@ The input to `AutoImpute.py` is a pre-processed count single cell matrix, with c
 ![AutoImpute-Pipeline](./images/pipeline.jpg).
 
 ## Dependencies
-* For Python (2.7):
+* For Python (3.5):
     > numpy, scikit-learn, tensorflow, matplotlib.
 * For R (pre-processing):
 	> R.matlab, Matrix, ggplot2, Rtsne, svd, plyr, dplyr, data.table, mclust, flexclust, reshape2, irlba, dynamicTreeCut, RColorBrewer, GenSA, gplots
@@ -27,34 +30,31 @@ The input to `AutoImpute.py` is a pre-processed count single cell matrix, with c
 * `AutoImpute\ Model/Pre-processing/` - contains the R scripts for pre-processing.
 
 ## Execution
-* To run the `AutoImpute` model, first change your directory to `AutoImpute\ Model` using the following command :
-	* `cd AutoImpute\ Model`
-* `AutoImpute` model can be run using the following command and command line arguments :
-```bash
-python AutoImpute.py
-```
+* To run, import `AutoImpute` and use the `autoimpute()` function
 ```
 Options :
-		--debug True	# To print and save debug statements (loss function value)
-		--debug_display_step 1	# Number of steps to display loss function value after
-		--hidden_units 2000	# Size of hidden layer or latent space dimensions.
-		--lambda_val 1	# Regularization coefficient, to control the contribution of regularization term in the cost function.
-		--initial_learning_rate 0.0001	# Initial value of learning rate.
-		--iterations 7000	# Number of iterations to train the model for.
-		--threshold 0.0001	# To stop gradient descent after the change in loss function value in consecutive iterations is less than the threshold, implying convergence.
-		--data blakeley.csv 	# Dataset to run the script on.
-		--masked_matrix_test False	# Run the masked matrix recovery test?
-		--masking_percentage 10	# Percentage of masking required. Like 10, 20, 12.5 etc.
-		--save_model_location checkpoints/model1.ckpt 	# Location to save the learnt model.
-		--load_model_location checkpoints/model0.ckpt 	# Load the saved model from.
-		--log_file log.txt 	# text file to save training logs.
-		--load_saved False # flag to indicate if a saved model will be loaded.
-		--imputed_save imputed_matrix 	# Save the imputed matrix as
-		--masked_save masked_matrix 	# Save the masked matrix as
-
+	debug: type = bool, default=True, Want debug statements
+	debug_display_step: type=int, default=1, Display loss after
+	# Hyper-parameters
+	hidden_units: type=int, default=2000, Size of hidden layer or latent space dimensions
+	lambda_val: type=int, default=1, Regularization coefficient, to control the contribution of regularization term in the cost function
+	initial_learning_rate: type=float, default=0.0001, Initial value of learning rate
+	iterations: type=int, default=7000, Number of iterations to train the model for
+	threshold: type=int, default=0.0001, To stop gradient descent after the change in loss function value in consecutive iterations is less than the threshold, implying convergence
+	# Data
+	data: type = str representing the filename of a delimited file or a numpy array.
+	# Run the masked matrix recovery test
+	masked_matrix_test: type = bool, default=False, nargs = '+', help = "Run the masked matrix recovery test?
+	masking_percentage: type = float, default=10, nargs = '+', help = "Percentage of masking required. Like 10, 20, 12.5 etc
+	# Model save and restore options
+	save_model_location: type=str, default='checkpoints/model1.ckpt', Location to save the learnt model
+	load_model_location: type=str, default='checkpoints/model0.ckpt', Load the saved model from.
+	log_file: type=str, default='log.txt', text file to save training logs
+	load_saved: type=bool, default=False, flag to indicate if a saved model will be loaded
+	# masked and imputed matrix save location / name
+	imputed_save: type=str, default='imputed_matrix', save the imputed matrix as
+	masked_save: type=str, default='masked_matrix', save the masked matrix as
 ```
-_**Note:** If you use any other dataset (apart from blakeley.csv), do the necessary preprocessing using as described below, then run AutoImpute as `python AutoImpute.py --data <dataset_name>.{mat, csv}`._
-
 * To pre-process any dataset, place the raw data (in `.csv` format) into `AutoImpute\ Model/data/raw/` and change your directory to `AutoImpute\ Model/Pre-processing/`.
 * Run the R-script `pre-process.R` using the following command:
 ```bash
